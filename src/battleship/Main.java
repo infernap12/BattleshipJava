@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Main {
 
+
     public static void main(String[] args) {
         Player me = new Player();
         me.printDisplayboard();
@@ -36,6 +37,8 @@ public class Main {
         System.out.println();
 
     }
+
+
 }
 
 class Player {
@@ -129,4 +132,68 @@ enum shipType {
     shipType(int size) {
         this.size = size;
     }
+
+    private void setBoardChar(String input, char ch) {
+        Coord loc = new Coord(input);
+        board[loc.y][loc.x] = ch;
+    }
+
+    private char getBoardChar(String input) {
+        Coord loc = new Coord(input);
+        return board[loc.y][loc.x];
+    }
+
+    public ArrayList<Coord> getParts(Coord start, Coord end) {
+        boolean isVertical = start.x == end.x;
+        boolean isHorizontal = start.y == end.y;
+
+        ArrayList<Coord> parts = new ArrayList<>();
+
+
+        // Check if the movement is along the same row or column
+        if (isHorizontal) {
+            // Same row, different columns
+            for (int i = Math.min(start.x, end.x); i <= Math.max(start.x, end.x); i++) {
+                parts.add(new Coord(start.y, i));
+            }
+        } else if (isVertical) {
+            // Same column, different rows
+            for (int i = Math.min(start.y, end.y); i <= Math.max(start.y, end.y); i++) {
+                parts.add(new Coord(i, start.x));
+            }
+        } else {
+            System.out.println("Error");
+            System.exit(01);
+        }
+
+
+        return parts;
+    }
+}
+
+class Coord {
+    int x;
+    int y;
+    String name;
+
+    public Coord(String input) {
+        this.name = input.toUpperCase();
+
+        this.x = Integer.parseInt(this.name.substring(1)) - 1;
+        this.y = Character.toUpperCase(this.name.charAt(0)) - 65;
+    }
+
+    public Coord(int y, int x) {
+        this.x = x;
+        this.y = y;
+
+        name = String.valueOf((char) (this.y + 65)) + (this.x + 1);
+
+    }
+}
+
+class ship {
+    int length;
+    Coord[] parts;
+    String shipClass;
 }
