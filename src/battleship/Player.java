@@ -7,6 +7,34 @@ public class Player {
     char[][] board;
     Ship[] ships;
 
+    static void setupUser(Player player) {
+        ArrayList<Ship> shipArrayList = new ArrayList<>();
+
+        for (Ship.ShipType shipClass : Ship.ShipType.values()) {
+            Coord[] parts;
+
+            System.out.printf("Enter the coordinates of the %s (%d cells):%n%n", shipClass.toString(), shipClass.size);
+
+            while (true) {
+                parts = InputUtils.requestParts();
+
+                if (parts.length != shipClass.size) {
+                    System.out.printf("Error! Wrong length of the %s! Try again:%n%n", shipClass.name());
+                } else if (InputUtils.isInCollision(shipArrayList,parts)) {
+                    System.out.println("Error! You placed it too close to another one. Try again:\n");
+                } else {
+                    for (Coord part : parts) {
+                        player.setBoardChar(part,'O');
+                    }
+                    break;
+                }
+
+            }
+            shipArrayList.add(new Ship(shipClass, parts));
+            player.printDisplayboard();
+        }
+    }
+
     void printDisplayboard() {
         char[] rowHeaders = "ABCDEFGHIJ".toCharArray();
         System.out.print("  ");
@@ -23,23 +51,18 @@ public class Player {
             }
             System.out.println(); //new line
         }
+        System.out.println();// blank after board
     }
 
-    public Player() {
+    Player() {
         this.board = new char[10][10];
 
         for (char[] row : board) {
             Arrays.fill(row, '~');
         }
-        ArrayList<Ship> shipArrayList = new ArrayList<>();
-        for (Ship.ShipType shipClass : Ship.ShipType.values()) {
-            shipArrayList.add(new Ship(shipClass));
-        }
-
     }
 
-    private void setBoardChar(String input, char ch) {
-        Coord loc = new Coord(input);
+    private void setBoardChar(Coord loc, char ch) {
         board[loc.y][loc.x] = ch;
     }
 
@@ -76,6 +99,6 @@ public class Player {
         }
 
 
-        return parts.toArray(new Coord[parts.size()]);
+        return parts.toArray(new Coord[0]);
     }
 }

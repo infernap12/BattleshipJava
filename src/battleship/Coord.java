@@ -1,9 +1,9 @@
 package battleship;
 
-class Coord {
-    int x;
-    int y;
-    String name;
+public class Coord {
+    final int x;
+    final int y;
+    final String name;
 
     Coord(String input) {
         this.name = input.toUpperCase();
@@ -31,7 +31,7 @@ class Coord {
             System.out.println("Error! Wrong ship location! Try again:");
             return false;
         }
-        boolean correctSize = isValidSize(start,end, shipClass.size);
+        boolean correctSize = isValidSize(start, end, shipClass.size);
         if (!correctSize) {
             System.out.printf("Error! Wrong length of the %s! Try again:%n%n", shipClass.name());
             return false;
@@ -41,21 +41,22 @@ class Coord {
     }
 
     private static boolean isValidSize(Coord start, Coord end, int size) {
-        if (isHorizontal(start,end)) {
-          return (Math.abs(start.x - end.x) + 1) == size;
+        if (isHorizontal(start, end)) {
+            return (Math.abs(start.x - end.x) + 1) == size;
         }
 
         return true;
     }
 
-    private static boolean isNotDiagonal(Coord start, Coord end) {
+    static boolean isNotDiagonal(Coord start, Coord end) {
         return isVertical(start, end) || isHorizontal(start, end);
     }
-    private static boolean isHorizontal(Coord start, Coord end) {
+
+    static boolean isHorizontal(Coord start, Coord end) {
         return start.y == end.y;
     }
 
-    private static boolean isVertical(Coord start, Coord end) {
+    static boolean isVertical(Coord start, Coord end) {
         return start.x == end.x;
     }
 
