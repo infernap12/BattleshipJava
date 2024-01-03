@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Player {
-    char[][] board;
+    char[][] friendlyBoard;
+    char[][] enemyBoard;
     Ship[] ships;
 
     static void setupUser(Player player) {
@@ -24,7 +25,7 @@ public class Player {
                     System.out.println("Error! You placed it too close to another one. Try again:\n");
                 } else {
                     for (Coord part : parts) {
-                        player.setBoardChar(part,'O');
+                        player.setBoardChar(player.friendlyBoard, part,'O');
                     }
                     break;
                 }
@@ -32,7 +33,7 @@ public class Player {
             }
             shipArrayList.add(new Ship(shipClass, parts));
             player.ships = shipArrayList.toArray(new Ship[0]);
-            player.printDisplayboard();
+            player.printBoard(player.friendlyBoard);
         }
     }
 
@@ -60,11 +61,12 @@ public class Player {
             ch = 'x';
         }
 
-
-        this.setBoardChar(coord, ch);
+        for (char[][] board : new char[][][]{friendlyBoard, enemyBoard}) {
+            this.setBoardChar(board,coord,ch);
+        }
     }
 
-    void printDisplayboard() {
+    void printBoard(char[][] board) {
         char[] rowHeaders = "ABCDEFGHIJ".toCharArray();
         System.out.print("  ");
         for (int i = 1; i <= 10; i++) {
@@ -72,7 +74,7 @@ public class Player {
         }
         System.out.println();//new line
 
-        //print board with letter headers
+        //print friendlyBoard with letter headers
         for (int i = 0; i < board.length; i++) {
             System.out.print(rowHeaders[i] + " ");// print that rows letter
             for (int j = 0; j < board[i].length; j++) {// iterates that row and whacks it down
@@ -80,24 +82,28 @@ public class Player {
             }
             System.out.println(); //new line
         }
-        System.out.println();// blank after board
+        System.out.println();// blank after friendlyBoard
     }
 
     Player() {
-        this.board = new char[10][10];
+        this.friendlyBoard = new char[10][10];
+        this.enemyBoard = new char[10][10];
 
-        for (char[] row : board) {
+        for (char[] row : friendlyBoard) {
+            Arrays.fill(row, '~');
+        }
+        for (char[] row : enemyBoard) {
             Arrays.fill(row, '~');
         }
     }
 
-    private void setBoardChar(Coord loc, char ch) {
+    private void setBoardChar(char[][] board, Coord loc, char ch) {
         board[loc.y][loc.x] = ch;
     }
 
     private char getBoardChar(String input) {
         Coord loc = new Coord(input);
-        return board[loc.y][loc.x];
+        return friendlyBoard[loc.y][loc.x];
     }
 
     public static Coord[] getParts(Coord[] coords) {
