@@ -14,12 +14,17 @@ public class Main {
 
         me.printBoard(me.enemyBoard);
 
+
+        do {
+            playRound(me);
+        } while (!me.isLost());
+        System.out.println("You sank the last ship. You won. Congratulations!");
+    }
+
+    private static void playRound(Player player) {
         System.out.println("Take a shot!\n");
-
-        me.receiveFire(InputUtils.requestCoord());
-
-        me.printBoard(me.friendlyBoard);
-        me.printBoard(me.enemyBoard);
+        player.receiveFire(InputUtils.requestCoord());
+        player.printBoard(player.enemyBoard);
 
     }
 }

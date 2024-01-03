@@ -48,17 +48,28 @@ public class Player {
         }
         return null;
     }
-
+    boolean isLost() {
+        for (Ship ship : ships) {
+            if (!ship.isSunk()) {
+                return false;
+            }
+        }
+        return true;
+    }
     public void receiveFire(Coord coord) {
         char ch;
         Ship hitShip = getShipByCoord(coord);
         if (hitShip == null) {
-            System.out.println("You missed!\n");
+            System.out.println("You missed. Try again:\n");
             ch = 'M';
         } else {
-            System.out.println("You hit a ship!\n");
-            hitShip.hp--;
+            hitShip.hp = Math.max(hitShip.hp - 1, 0);
             ch = 'x';
+            if (hitShip.isSunk()) {
+                System.out.println("You sank a ship! Specify a new target:\n");
+            } else {
+                System.out.println("You hit a ship! Try again:\n");
+            }
         }
 
         for (char[][] board : new char[][][]{friendlyBoard, enemyBoard}) {

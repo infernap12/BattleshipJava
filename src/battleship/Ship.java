@@ -19,10 +19,13 @@ class Ship {
         this.collision = getCollision(parts[0], parts[parts.length - 1]);
     }
 
+    boolean isSunk() {
+        return hp == 0;
+    }
 
     static Coord[] getCollision(Coord start, Coord end) {
         ArrayList<Coord> collisionParts = new ArrayList<>();
-        for (int j = Math.max((Math.min(start.y, end.y) - 1), 0); j <= Math.min((Math.max(start.y,end.y) + 1), 9); j++) {
+        for (int j = Math.max((Math.min(start.y, end.y) - 1), 0); j <= Math.min((Math.max(start.y, end.y) + 1), 9); j++) {
             for (int i = Math.max((Math.min(start.x, end.x)) - 1, 0); i <= Math.min((Math.max(start.x, end.x) + 1), 9); i++) {
                 collisionParts.add(new Coord(j, i));
             }
