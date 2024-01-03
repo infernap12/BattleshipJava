@@ -6,9 +6,19 @@ import java.util.Scanner;
 
 public class InputUtils {
     static final Scanner scanner = new Scanner(System.in);
+//    static final Scanner scanner = new Scanner("""
+//        F3 F7
+//        A1 D1
+//        J7 J10
+//        J10 J8
+//        B9 D8
+//        B9 D9
+//        E6 D6
+//        I2 J2
+//        A1""");
     static Coord[] requestParts() {
-        Coord start = null;
-        Coord end = null;
+        Coord start;
+        Coord end;
 
         while (true) {
                 String inputLine = scanner.nextLine().trim();
@@ -36,13 +46,20 @@ public class InputUtils {
 
     }
 
-    private static Coord requestCoord() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            if (!scanner.hasNext("[A-Ja-j](10|[1-9])")) {
-                System.out.println("Error outside grid");
+    static Coord requestCoord() {
+        Coord coord;
+        while (true) {
+            String inputLine = scanner.nextLine().trim();
+            if (!inputLine.matches("[A-Ja-j](10|[1-9])")) {
+                System.out.println("\nError outside grid\n");
+                scanner.nextLine();
+                continue;
             }
-            return new Coord(scanner.next());
+            coord = new Coord(inputLine);
+            break;
+
         }
+        return coord;
     }
 
     static boolean isInCollision(ArrayList<Ship> shipArrayList, Coord[] parts) {

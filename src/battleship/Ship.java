@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 class Ship {
     final int length;
+    int hp;
     Coord[] parts;
     Coord[] collision;
     final ShipType shipClass;
@@ -13,6 +14,7 @@ class Ship {
     public Ship(ShipType shipClass, Coord[] parts) {
         this.shipClass = shipClass;
         this.length = this.shipClass.size;
+        this.hp = this.length;
         this.parts = parts;
         this.collision = getCollision(parts[0], parts[parts.length - 1]);
     }
@@ -26,17 +28,6 @@ class Ship {
             }
         }
         return collisionParts.toArray(new Coord[0]);
-    }
-    Ship getShipByCoord(Coord coord,Player player) {
-        for (Ship ship : player.ships) {
-            for (Coord part : parts) {
-                if (part.name.equals(coord.name)) {
-                    return ship;
-                }
-
-            }
-        }
-        return null;
     }
 
     enum ShipType {

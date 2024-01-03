@@ -31,8 +31,37 @@ public class Player {
 
             }
             shipArrayList.add(new Ship(shipClass, parts));
+            player.ships = shipArrayList.toArray(new Ship[0]);
             player.printDisplayboard();
         }
+    }
+
+    Ship getShipByCoord(Coord coord) {
+        for (Ship ship : this.ships) {
+            for (Coord part : ship.parts) {
+                if (part.name.equals(coord.name)) {
+                    return ship;
+                }
+
+            }
+        }
+        return null;
+    }
+
+    public void receiveFire(Coord coord) {
+        char ch;
+        Ship hitShip = getShipByCoord(coord);
+        if (hitShip == null) {
+            System.out.println("You missed!\n");
+            ch = 'M';
+        } else {
+            System.out.println("You hit a ship!\n");
+            hitShip.hp--;
+            ch = 'x';
+        }
+
+
+        this.setBoardChar(coord, ch);
     }
 
     void printDisplayboard() {
