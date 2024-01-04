@@ -1,27 +1,38 @@
 package battleship;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 public class InputUtils {
+    static FileHandler fh;
+
+    static {
+        try {
+            fh = new FileHandler("log.log",true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static final Logger logger = Logger.getLogger(InputUtils.class.getName());
     static final Scanner scanner = new Scanner(System.in);
-//    static final Scanner scanner = new Scanner("""
-//        F3 F7
-//        A1 D1
-//        J7 J10
-//        J10 J8
-//        B9 D8
-//        B9 D9
-//        E6 D6
-//        I2 J2
-//        A1""");
+
+    static void pause() {
+        scanner.nextLine();
+    }
+
     static Coord[] requestParts() {
         Coord start;
         Coord end;
 
         while (true) {
                 String inputLine = scanner.nextLine().trim();
+
+                logger.info(inputLine);
                 if (!inputLine.matches("[A-Ja-j](10|[1-9]) [A-Ja-j](10|[1-9])")) {
                     System.out.println("\nError outside grid\n");
                     scanner.nextLine();
@@ -64,7 +75,6 @@ public class InputUtils {
 
     static boolean isInCollision(ArrayList<Ship> shipArrayList, Coord[] parts) {
 
-        //test if the shilist is null
         for (Ship ship : shipArrayList) {
             for (Coord collision : ship.collision) {
                 for (Coord part : parts) {
@@ -73,7 +83,6 @@ public class InputUtils {
                     }
                 }
             }
-            //fo each ship, iterate every collisions, then iterate every part, if part == collision return true;Error! You placed it too close to another one. Try again:
         }
 
 

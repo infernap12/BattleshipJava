@@ -21,33 +21,6 @@ public class Coord {
     }
 
 
-    static boolean isValidLine(Coord start, Coord end, Ship.ShipType shipClass) {
-        if (start == null || end == null) {
-            return false;
-        }
-        boolean vertical = isVertical(start, end);
-        boolean horizontal = isHorizontal(start, end);
-        if (!vertical && !horizontal) {
-            System.out.println("Error! Wrong ship location! Try again:");
-            return false;
-        }
-        boolean correctSize = isValidSize(start, end, shipClass.size);
-        if (!correctSize) {
-            System.out.printf("Error! Wrong length of the %s! Try again:%n%n", shipClass.name());
-            return false;
-        }
-
-        return true;
-    }
-
-    private static boolean isValidSize(Coord start, Coord end, int size) {
-        if (isHorizontal(start, end)) {
-            return (Math.abs(start.x - end.x) + 1) == size;
-        }
-
-        return true;
-    }
-
     static boolean isNotDiagonal(Coord start, Coord end) {
         return isVertical(start, end) || isHorizontal(start, end);
     }

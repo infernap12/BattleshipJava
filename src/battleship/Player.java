@@ -7,25 +7,43 @@ public class Player {
     char[][] friendlyBoard;
     char[][] enemyBoard;
     Ship[] ships;
+    String name;
+    Player opposition;
 
-    static void setupUser(Player player) {
+    Player(String name) {
+        this.friendlyBoard = new char[10][10];
+        this.enemyBoard = new char[10][10];
+        this.name = name;
+        for (char[] row : friendlyBoard) {
+            Arrays.fill(row, '~');
+        }
+        for (char[] row : enemyBoard) {
+            Arrays.fill(row, '~');
+        }
+        Player.setupUser(this);
+
+    }
+
+    private static void setupUser(Player player) {
+        System.out.printf("%n%s, place your ships on the game field%n%n", player.name);
+        player.printBoard(player.friendlyBoard);
         ArrayList<Ship> shipArrayList = new ArrayList<>();
 
         for (Ship.ShipType shipClass : Ship.ShipType.values()) {
             Coord[] parts;
 
-            System.out.printf("Enter the coordinates of the %s (%d cells):%n%n", shipClass.toString(), shipClass.size);
+            System.out.printf("%nEnter the coordinates of the %s (%d cells):%n%n", shipClass.toString(), shipClass.size);
 
             while (true) {
                 parts = InputUtils.requestParts();
 
                 if (parts.length != shipClass.size) {
                     System.out.printf("Error! Wrong length of the %s! Try again:%n%n", shipClass.name());
-                } else if (InputUtils.isInCollision(shipArrayList,parts)) {
+                } else if (InputUtils.isInCollision(shipArrayList, parts)) {
                     System.out.println("Error! You placed it too close to another one. Try again:\n");
                 } else {
                     for (Coord part : parts) {
-                        player.setBoardChar(player.friendlyBoard, part,'O');
+                        player.setBoardChar(player.friendlyBoard, part, 'O');
                     }
                     break;
                 }
@@ -48,6 +66,7 @@ public class Player {
         }
         return null;
     }
+
     boolean isLost() {
         for (Ship ship : ships) {
             if (!ship.isSunk()) {
@@ -56,9 +75,10 @@ public class Player {
         }
         return true;
     }
-    public void receiveFire(Coord coord) {
+
+    public void Fire(Coord coord) {
         char ch;
-        Ship hitShip = getShipByCoord(coord);
+        Ship hitShip = opposition.getShipByCoord(coord);
         if (hitShip == null) {
             System.out.println("You missed. Try again:\n");
             ch = 'M';
@@ -72,8 +92,8 @@ public class Player {
             }
         }
 
-        for (char[][] board : new char[][][]{friendlyBoard, enemyBoard}) {
-            this.setBoardChar(board,coord,ch);
+        for (char[][] board : new char[][][]{opposition.friendlyBoard, enemyBoard}) {
+            this.setBoardChar(board, coord, ch);
         }
     }
 
@@ -93,30 +113,19 @@ public class Player {
             }
             System.out.println(); //new line
         }
-        System.out.println();// blank after friendlyBoard
-    }
-
-    Player() {
-        this.friendlyBoard = new char[10][10];
-        this.enemyBoard = new char[10][10];
-
-        for (char[] row : friendlyBoard) {
-            Arrays.fill(row, '~');
-        }
-        for (char[] row : enemyBoard) {
-            Arrays.fill(row, '~');
-        }
     }
 
     private void setBoardChar(char[][] board, Coord loc, char ch) {
         board[loc.y][loc.x] = ch;
     }
 
+    @SuppressWarnings("unused")
     private char getBoardChar(String input) {
         Coord loc = new Coord(input);
         return friendlyBoard[loc.y][loc.x];
     }
 
+    @SuppressWarnings("unused")
     public static Coord[] getParts(Coord[] coords) {
         return getParts(coords[0], coords[1]);
     }
