@@ -1,0 +1,15 @@
+Ideas for extension.
+
+AI that makes random moves until it hits
+if it has a hit, it tries to chase the line until it gets a sink, and will remember which line lengths are dead, and know when to stop.
+Maybe different levels of AI that remember less stuff?
+
+UI when I learn that i guess.
+
+Networking?
+that could be fun, or horrible
+
+Gamerule extensions:
+Salvo mode?
+Larger map, more ships?
+Movement after X turns// AI for that would be interesting. Do weights based on probabilties that something has moved?
